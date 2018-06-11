@@ -83,8 +83,7 @@ function job_setup()
 	--Haste mode
 	state.HasteMode = M(false, 'Haste 2')
  
-	-- JA IDs for actions that always have TH: Provoke, Animated Flourish
-    info.default_ja_ids = S{35, 204}
+	
 	 
     determine_haste_group()
 end

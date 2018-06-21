@@ -6,17 +6,19 @@
 -- Maintained and fixed by Rikimarueye@pheonix
 -- Original base lua created by Moten.
 
--- Version 1.0.0.7
+-- Version 1.0.1.0
 
 --[[
 	To do list:
 	
-	Fix and update and optimize DPS for all Facing sets.
+	 Update and optimize DPS.
 	
 ]]
 
 --[[
 	Change log:
+	
+	1.0.1.0: A major development in my GS. I was able to borrow code from an addon to make a conditional gear swap based on position
 	
 	1.0.0.7: Fixed the update to idle set after zoning when using a teleport ring 
 	
@@ -39,6 +41,7 @@
     -- Start of the setup, sets, and functions.
 ---------------------------------------------------------------------------------------------------
 
+require('vectors')
 
 -- Initialization function for this job file.
 function get_sets()
@@ -46,7 +49,7 @@ function get_sets()
     
     -- Load and initialize the include file.
     include('Mote-Include.lua')
-	include('organizer-lib')
+	
 
 	windower.register_event('zone change', function()
 	state.WarpMode:reset()
@@ -61,6 +64,9 @@ function job_setup()
 
     include('Mote-TreasureHunter')
     state.TreasureMode:set('Tag')
+	
+	check_facing()
+	
 	
 	get_combat_form()
 	
@@ -79,11 +85,9 @@ function job_setup()
 	state.Buff['Presto'] = buffactive['Presto'] or false
 	
 	
-	
 	--Haste mode
 	state.HasteMode = M(false, 'Haste 2')
  
-	
 	 
     determine_haste_group()
 end
@@ -105,7 +109,7 @@ function user_setup()
 	state.WeaponMode = M{['description']='Weapon', 'Terpsichore', 'Aeneas'}
 	
     -- Additional local binds
-	send_command('wait 8;input /lockstyleset 16')
+	send_command('wait 10;input /lockstyleset 16')
     send_command('bind ^` gs c toggle HasteMode')
     send_command('bind !` input /ja "Chocobo Jig II" <me>')
     send_command('bind ^z gs c cycle WarpMode')
@@ -528,7 +532,7 @@ function init_gear_sets()
 		ring2="Regal Ring",
 		back={ name="Senuna's Mantle", augments={'DEX+20','Mag. Acc+20 /Mag. Dmg.+20','DEX+10','Weapon skill damage +10%',}},
 		waist="Eschan Stone",
-		legs={ name="Herculean Trousers", augments={'Mag. Acc.+16 "Mag.Atk.Bns."+16','"Fast Cast"+5','"Mag.Atk.Bns."+15',}},
+		legs={ name="Herculean Trousers", augments={'Mag. Acc.+17 "Mag.Atk.Bns."+17','Weapon skill damage +2%','STR+5','"Mag.Atk.Bns."+14',}},
 		feet={ name="Herculean Boots", augments={'Mag. Acc.+20 "Mag.Atk.Bns."+20','Weapon skill damage +1%','MND+5','Mag. Acc.+12','"Mag.Atk.Bns."+11',}}}
     
     
@@ -600,9 +604,9 @@ function init_gear_sets()
     sets.idle = {
 		ammo="Staunch Tathlum",
 		head={ name="Herculean Helm", augments={'Accuracy+23','Damage taken-4%','AGI+7',}},
-		neck="Bathy Choker +1",
+		neck="Loricate Torque +1",
 		ear1="Genmei Earring",
-	    ear2="Infused Earring",
+	    ear2="Odnowa Earring +1",
 		body="Horos Casaque +3",
 		hands="Turms Mittens",
 		legs="Mummu Kecks +2",
@@ -614,9 +618,9 @@ function init_gear_sets()
 	sets.idle.Town = {
 		ammo="Staunch Tathlum",
 	    head="Moogle Masque",
-		neck="Bathy Choker +1",
+		neck="Loricate Torque +1",
 		ear1="Genmei Earring",
-	    ear2="Infused Earring",
+	    ear2="Odnowa Earring +1",
 		body="Tidal Talisman",
 		hands={ name="Herculean Gloves", augments={'Accuracy+21 Attack+21','Mag. Acc.+2','Damage taken-3%','Mag. Acc.+5 "Mag.Atk.Bns."+5',}},
 		ring1="Vocane Ring +1",
@@ -672,20 +676,20 @@ function init_gear_sets()
 		legs="Mummu Kecks +2"
         }
 		
-	-- 49PDT and 29MDT and 464 MEVA
+	-- 51 PDT and 41 MDT 41 DT and 436 MEVA
 	sets.defense.DT = {
 	    ammo="Staunch Tathlum",
 	    head={ name="Herculean Helm", augments={'Accuracy+23','Damage taken-4%','AGI+7',}},
-		neck="Warder's Charm +1",
-        body="Meghanada Cuirie +2",
+		neck="Loricate Torque +1",
+        body="Horos Casaque +3",
 		ear1="Genmei Earring",
 		ear2="Sanare Earring",
-		hands="Turms Mittens",
+		hands={ name="Herculean Gloves", augments={'Accuracy+21 Attack+21','Mag. Acc.+2','Damage taken-3%','Mag. Acc.+5 "Mag.Atk.Bns."+5',}},
 		ring1="Vocane Ring +1",
 		ring2="Defending Ring",
 		waist="Engraved Belt",
 		legs="Mummu Kecks +2",
-		back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Phys. dmg. taken-10%',}},
+		back="Agema Cape",
 		feet="Turms Leggings"}
 
 	
@@ -752,7 +756,7 @@ function init_gear_sets()
 		back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Dual Wield"+10',}},
 		waist="Reiki Yotai",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
 	
 	sets.engaged.Facing = {
@@ -768,7 +772,7 @@ function init_gear_sets()
 		back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Dual Wield"+10',}},
 		waist="Reiki Yotai",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
     sets.engaged.Acc = {
 		ammo="Yamarang",
@@ -823,7 +827,7 @@ function init_gear_sets()
 		 back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Dual Wield"+10',}},
 		waist="Reiki Yotai",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
 	
 	sets.engaged.Facing.Haste_10 = {
@@ -839,7 +843,7 @@ function init_gear_sets()
 		 back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Dual Wield"+10',}},
 		waist="Reiki Yotai",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
     sets.engaged.Acc.Haste_10 = {
 		ammo="Yamarang",
@@ -896,7 +900,7 @@ function init_gear_sets()
 		 back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Dual Wield"+10',}},
 		waist="Reiki Yotai",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
     
 	sets.engaged.Facing.Haste_15 = {
@@ -912,7 +916,7 @@ function init_gear_sets()
 		 back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Dual Wield"+10',}},
 		waist="Reiki Yotai",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}	
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}	
 
     sets.engaged.Acc.Haste_15 = {
 		ammo="Yamarang",
@@ -969,7 +973,7 @@ function init_gear_sets()
 		 back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Dual Wield"+10',}},
 		waist="Windbuffet Belt +1",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
     
 	sets.engaged.Facing.Haste_25 = {
@@ -985,7 +989,7 @@ function init_gear_sets()
 		 back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Dual Wield"+10',}},
 		waist="Windbuffet Belt +1",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 
 	
     sets.engaged.Acc.Haste_25 = {
@@ -1043,7 +1047,7 @@ function init_gear_sets()
 		 back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Dual Wield"+10',}},
 		waist="Reiki Yotai",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
     
 	sets.engaged.Facing.Haste_30 = {
@@ -1059,7 +1063,7 @@ function init_gear_sets()
 		 back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Dual Wield"+10',}},
 		waist="Windbuffet Belt +1",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
     sets.engaged.Acc.Haste_30 = {
 		ammo="Yamarang",
@@ -1116,7 +1120,7 @@ function init_gear_sets()
 		back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10',}},
 		waist="Windbuffet Belt +1",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
    
 		
@@ -1133,7 +1137,7 @@ function init_gear_sets()
 		back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10',}},
 		waist="Windbuffet Belt +1",
 		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
     sets.engaged.Acc.Haste_40 = {
 		ammo="Yamarang",
@@ -1176,20 +1180,20 @@ function init_gear_sets()
 		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
     --Aftermath set
-	sets.engaged.AM.MaxHaste= {
+	sets.engaged.AM.MaxHaste = {
 	    ammo="Yamarang",
 		head="Maculele Tiara +1",
 		neck="Anu Torque",
 		ear1="Sherida Earring",
 		ear2="Telos Earring",
-		body="Turms Harness",
+		body={ name="Horos Casaque +3", augments={'Enhances "No Foot Rise" effect',}},
 		hands={ name="Adhemar Wrist. +1", augments={'STR+12','DEX+12','Attack+20',}},
 		ring1="Ilabrat Ring",
 		ring2="Moonbeam Ring",
 		back={ name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10',}},
 		waist="Kentarch Belt +1",
-		legs="Samnuha Tights",
-		feet="Horos T. Shoes +3"}
+		legs="Adhemar Kecks +1",
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}}}
 	
     
 
@@ -1237,7 +1241,8 @@ function init_gear_sets()
     sets.buff['Climactic Flourish'] = {head="Maculele Tiara +1"}
 	sets.buff.doom = {ring1="Blenmot's Ring",ring2="Purity Ring"}
 	sets.buff.sleep = {head="Frenzy Sallet"}
-    
+	sets.facing = {feet="Horos T. Shoes +3"}
+   
 end
 
 
@@ -1327,9 +1332,12 @@ end
 -- buff == buff gained or lost
 -- gain == true if the buff was gained, false if it was lost.
 function job_buff_change(buff,gain, eventArgs)
+
     --If we gain or lose any haste buffs, adjust which gear set we target.
-    if S{'haste','march','embrava','haste samba','indi-haste','geo-haste','mighty guard', 'aftermath: lv.3'}:contains(buff:lower()) then
-        get_combat_form()
+    if S{'haste','march','embrava','haste samba','indi-haste',
+		'geo-haste','mighty guard', 'aftermath: lv.1', 'aftermath: lv.2', 'aftermath: lv.3'}:contains(buff:lower()) then
+       
+		get_combat_form()
 		determine_haste_group()
         handle_equipping_gear(player.status)
 	
@@ -1337,11 +1345,17 @@ function job_buff_change(buff,gain, eventArgs)
     -- Equipment for debuffs.
 	---------------------------------------------------------------------------------------------------	
     
-	elseif (buff == "sleep" and gain) and player.hp > 100 then 
-        equip(sets.buff.sleep)
-                if buffactive.stoneskin then
+	elseif buff:lower()=='sleep' then
+        if gain and player.hp > 100 then 
+            equip(sets.buff.sleep)
+			add_to_chat(8, 'Nap time!!!')
+				if buffactive.stoneskin then
                     send_command('cancel Stoneskin')
-                end
+				end
+        elseif not gain then 
+            handle_equipping_gear(player.status)
+		end
+
 	elseif buff:lower()=='terror' then
         if gain and player.status == "Engaged" then 
             equip(sets.defense.DT)
@@ -1370,7 +1384,7 @@ function job_buff_change(buff,gain, eventArgs)
 		end
 		 
 	elseif buff:lower()=='doom' then
-        if gain and player.status == "Engaged" then 
+        if gain then 
             equip(sets.buff.doom)
 			disable('ring1' , 'ring2')
 			add_to_chat(8, 'Doomed!!! Use Holy Waters!!!')
@@ -1381,6 +1395,9 @@ function job_buff_change(buff,gain, eventArgs)
 
     elseif buff == 'Saber Dance' or buff == 'Climactic Flourish' then
         handle_equipping_gear(player.status)
+	elseif buff == 'Fan Dance' then
+        handle_equipping_gear(player.status)
+		
 	end
 	
 	if player.equipment.main == 'Twashtar' and buff:startswith('Aftermath') then
@@ -1412,28 +1429,19 @@ function job_buff_change(buff,gain, eventArgs)
         end
 	end
 	
+	
 end		
 
----------------------------------------------------------------------------------------------------
--- CombatForm to take into account facing or AM. Always update here.
----------------------------------------------------------------------------------------------------	
-function get_combat_form()
-    if buffactive['Aftermath: Lv.3'] and player.equipment.main == gear.Terpsichore then
-    	state.CombatForm:set('AM')
-    else
-        state.CombatForm:reset()
-    end
-end
 
 
 function job_status_change(new_status, old_status)
     if new_status == 'Engaged' then
+		check_facing()
 		get_combat_form()
 	    determine_haste_group()
 		 
     end
 end
-
 
 
 
@@ -1444,12 +1452,13 @@ end
 -- Called by the default 'update' self-command.
 function job_update(cmdParams, eventArgs)
     gearmode()
+	check_facing()
 	get_combat_form()
 	determine_haste_group()
 end
 
 --Automated use of Rudra's Storm.CF when buff is active.
-function get_custom_wsmode(spell, spellMap, defaut_wsmode)
+function get_custom_wsmode(spell, spellMap, default_wsmode)
     local wsmode
 
     if state.Buff['Climactic Flourish'] then
@@ -1470,7 +1479,11 @@ function customize_melee_set(meleeSet)
             meleeSet = set_combine(meleeSet, sets.buff['Climactic Flourish'])
         end
     end
-		
+	
+    if check_facing() == true then
+            meleeSet = set_combine(meleeSet, sets.facing)
+    end
+	
 	if state.TreasureMode.value == 'Fulltime' then
         meleeSet = set_combine(meleeSet, sets.TreasureHunter)
     end
@@ -1495,7 +1508,16 @@ function customize_idle_set(idleSet)
     return idleSet
 end
 
-
+---------------------------------------------------------------------------------------------------
+-- CombatForm to take into account facing or AM. Always update here.
+---------------------------------------------------------------------------------------------------	
+function get_combat_form()
+    if buffactive['Aftermath: Lv.3'] and player.equipment.main == gear.Terpsichore then
+    	state.CombatForm:set('AM')
+    else
+        state.CombatForm:reset()
+    end
+end
 
 
 -- Function to display the current relevant user state when doing an update.
@@ -1532,8 +1554,8 @@ end
 -------------------------------------------------------------------------------------------------------------------
 
 -- Called for custom player commands.
---[[function job_self_command(cmdParams, eventArgs)
-end]]
+function job_self_command(cmdParams, eventArgs)
+end
 
 -------------------------------------------------------------------------------------------------------------------
     -- Determine haste groups and amend current gear
@@ -1757,8 +1779,38 @@ function job_pretarget(spell, action, spellMap, eventArgs)
 	
 end
 
+---------------------------------------------------------------------------------------------------
+-- Voodoo magic that makes my relic boots equip under radial conditions. Credit: Whoever made the Gaze addon.
+---------------------------------------------------------------------------------------------------
 
-    
+function check_facing()
+	if player.target.type == 'MONSTER' then
+		local target = windower.ffxi.get_mob_by_target('t')
+		local player = windower.ffxi.get_mob_by_target('me')
+		local dir_target = V{player.x, player.y} - V{target.x, target.y}
+		local dir_player = V{target.x, target.y} - V{player.x, player.y}
+		local player_heading = V{}.from_radian(player.facing)
+		local target_heading = V{}.from_radian(target.facing)
+		local player_angle = V{}.angle(dir_player, player_heading):degree():abs()
+		local target_angle = V{}.angle(dir_target, target_heading):degree():abs()
+		if player_angle < 90 and target_angle < 90 then
+			return true
+		else 
+			return false
+		end
+	end		
+end
+
+function getAngle(index)
+    local P = windower.ffxi.get_mob_by_target('me') --get player
+    local M = index and windower.ffxi.get_mob_by_id(index) or windower.ffxi.get_mob_by_target('t') --get target
+    local delta = {Y = (P.y - M.y),X = (P.x - M.x)} --subtracts target pos from player pos
+    local angleInDegrees = (math.atan2( delta.Y, delta.X) * 180 / math.pi)*-1 
+    local mult = 10^0
+    return math.floor(angleInDegrees * mult + 0.5) / mult
+end
+
+
 -- Select default macro book on initial load or subjob change.
 function select_default_macro_book()
     -- Default macro set/book

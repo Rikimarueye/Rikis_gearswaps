@@ -6,7 +6,7 @@
 -- Maintained and fixed by Rikimarueye@pheonix
 -- Original base lua created by Moten.
 
--- Version 1.0.0.7
+-- Version 1.0.0.8
 
 --[[
 	To do list:
@@ -17,6 +17,8 @@
 
 --[[
 	Change log:
+	
+	1.0.0.8: Added the a function to accurately use embolden during the post_midcast
 	
 	1.0.0.7: Preping for item replacements and rework of BSV
 	
@@ -39,6 +41,8 @@
     -- Start of the setup, sets, and functions.
 ---------------------------------------------------------------------------------------------------
 
+require('vectors')
+
 function get_sets()
     mote_include_version = 2
 
@@ -59,6 +63,7 @@ function job_setup()
     include('Mote-TreasureHunter')
     state.TreasureMode:set('Tag')
 	
+	check_facing()
 	get_combat_weapon()
 	--get_combat_form()
 	define_rune_info()
@@ -76,6 +81,8 @@ function job_setup()
 	
 	state.Buff['Valiance'] = buffactive['Valiance'] or false
 	
+	state.Buff['Embolden'] = buffactive['Embolden'] or false
+	
 end
 
 -------------------------------------------------------------------------------------------------------------------
@@ -83,7 +90,7 @@ end
 -------------------------------------------------------------------------------------------------------------------
 
 function user_setup()
-    state.OffenseMode:options('Normal', 'Hybrid')
+    state.OffenseMode:options('Normal', 'Hybrid', 'DD')
     state.WeaponskillMode:options('Normal')
     state.PhysicalDefenseMode:options('PDT')
     state.IdleMode:options('Regen', 'Refresh')
@@ -207,14 +214,14 @@ function init_gear_sets()
 		ring1="Shiva Ring +1",
 		ring2="Acumen Ring",
 		waist="Eschan Stone",
-		legs={ name="Herculean Trousers", augments={'Mag. Acc.+16 "Mag.Atk.Bns."+16','"Fast Cast"+5','"Mag.Atk.Bns."+15',}},
+		legs={ name="Herculean Trousers", augments={'Mag. Acc.+17 "Mag.Atk.Bns."+17','Weapon skill damage +2%','STR+5','"Mag.Atk.Bns."+14',}},
 		feet={ name="Herculean Boots", augments={'Mag. Acc.+20 "Mag.Atk.Bns."+20','Weapon skill damage +1%','MND+5','Mag. Acc.+12','"Mag.Atk.Bns."+11',}}}
 			
     sets.precast.JA['Swipe'] = sets.precast.JA['Lunge']
 	
     sets.precast.JA['Gambit'] = set_combine(sets.enmity, {hands="Runeist's Mitons +3"})
 	
-    sets.precast.JA['Rayke'] = set_combine(sets.enmity, {feet="Futhark Boots +1"})
+    sets.precast.JA['Rayke'] = set_combine(sets.enmity, {feet="Futhark Boots +2"})
 	
     sets.precast.JA['Elemental Sforzo'] = set_combine(sets.enmity, {body="Futhark Coat +3"})
 	
@@ -240,7 +247,7 @@ function init_gear_sets()
 		hands="Turms Mittens",
 		legs="Eri. Leg Guards +1",
 		feet="Runeist's Boots +3",
-		neck="Bathy Choker +1",
+		neck="Loricate Torque +1",
 		waist="Eschan Stone",
 		ear1="Etiolation Earring",
 		ear2="Odnowa Earring +1",
@@ -483,7 +490,7 @@ function init_gear_sets()
 		back="Merciful Cape"
 		})
 		
-	sets.midcast.Cure = {feet="Futhark Boots +1"}
+	sets.midcast.Cure = {feet="Futhark Boots +2"}
 	
 	--sets.midcast['Yoran-Oran (UC)'] = set_combine(sets.midcast.FastRecast, {body="Yoran Unity Shirt"})
 
@@ -598,25 +605,25 @@ function init_gear_sets()
 
 	
 	----------------------------------------------------------------------------------------------------------------------------------
-	-- Lionheart sets. DDing and hybrid sets.
+	-- Lionheart sets. Tanking, hybrid and DD sets.
 	----------------------------------------------------------------------------------------------------------------------------------
 	
 	
     sets.engaged.Lionheart = {
 		sub="Utu Grip",
-		ammo="Yamarang",
-		head={ name="Dampening Tam", augments={'DEX+10','Accuracy+15','Mag. Acc.+15','Quadruple Attack +3',}},
-		body={ name="Adhemar Jacket +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
-		hands={ name="Adhemar Wrist. +1", augments={'STR+12','DEX+12','Attack+20',}},
-		legs={ name="Adhemar Kecks +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
-		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}},
-		neck="Anu Torque",
-		waist="Windbuffet Belt +1",
-		ear1="Telos Earring",
-		ear2="Sherida Earring",
-		ring1="Niqmaddu Ring",
-		ring2="Ilabrat Ring",
-		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Phys. dmg. taken-10%',}},}
+		ammo="Staunch Tathlum",
+		head="Futhark Bandeau +2",
+		body="Futhark Coat +3",
+		hands="Turms Mittens",
+		legs="Eri. Leg Guards +1",
+		feet="Turms Leggings",
+		neck="Loricate Torque +1",
+		waist="Engraved Belt",
+		ear1="Genmei Earring",
+		ear2="Odnowa Earring +1",
+		ring1="Vocane Ring +1",
+		ring2="Defending Ring",
+		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+1','"Store TP"+10','Parrying rate+5%',}},}
 			
 	
 	-- 51 PDT/ 37 MDT
@@ -637,8 +644,24 @@ function init_gear_sets()
 		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Phys. dmg. taken-10%',}},
 		}
 
+	sets.engaged.Lionheart.DD = {
+		sub="Utu Grip",
+		ammo="Yamarang",
+		head={ name="Dampening Tam", augments={'DEX+10','Accuracy+15','Mag. Acc.+15','Quadruple Attack +3',}},
+		body={ name="Adhemar Jacket +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
+		hands={ name="Adhemar Wrist. +1", augments={'STR+12','DEX+12','Attack+20',}},
+		legs={ name="Adhemar Kecks +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}},
+		neck="Anu Torque",
+		waist="Windbuffet Belt +1",
+		ear1="Telos Earring",
+		ear2="Sherida Earring",
+		ring1="Niqmaddu Ring",
+		ring2="Epona's Ring",
+		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Phys. dmg. taken-10%',}},}	
+	
 	----------------------------------------------------------------------------------------------------------------------------------
-	-- Epo sets. Tanking and Hybrid sets.
+	-- Epo sets. Tanking, hybrid and DD sets.
 	----------------------------------------------------------------------------------------------------------------------------------
 	
 	sets.engaged.Epeolatry = {
@@ -676,23 +699,24 @@ function init_gear_sets()
 		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Phys. dmg. taken-10%',}},
 		}
 		
-	-- 51 PDT	
-    sets.engaged.PDT = {
-		main="Epeolatry",
+	sets.engaged.Epeolatry.DD = {
 		sub="Utu Grip",
 		ammo="Yamarang",
-		head="Meghanada Visor +2",
-		body="Runeist's Coat +3",
-		hands="Turms Mittens",
-		legs="Eri. Leg Guards +1",
-		feet="Turms Leggings",
-		neck="Loricate Torque +1",
-		waist="Flume Belt +1",
-		ear1="Genmei Earring",
-		ear2="Odnowa Earring +1",
-		ring1="Vocane Ring +1",
-		ring2="Defending Ring",
+		head={ name="Dampening Tam", augments={'DEX+10','Accuracy+15','Mag. Acc.+15','Quadruple Attack +3',}},
+		body={ name="Adhemar Jacket +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
+		hands={ name="Adhemar Wrist. +1", augments={'STR+12','DEX+12','Attack+20',}},
+		legs={ name="Adhemar Kecks +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
+		feet={ name="Herculean Boots", augments={'STR+10','Sklchn.dmg.+2%','Quadruple Attack +3','Accuracy+19 Attack+19','Mag. Acc.+4 "Mag.Atk.Bns."+4',}},
+		neck="Anu Torque",
+		waist="Windbuffet Belt +1",
+		ear1="Telos Earring",
+		ear2="Sherida Earring",
+		ring1="Niqmaddu Ring",
+		ring2="Ilabrat Ring",
 		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Phys. dmg. taken-10%',}},}
+		
+	-- 51 PDT	
+    sets.engaged.PDT = sets.engaged.Lionheart
 			
     
 			
@@ -710,10 +734,13 @@ function init_gear_sets()
 	sets.buff['Battuta'].Melee = {
 		feet="Turms Leggings",
 		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+1','"Store TP"+10','Parrying rate+5%',}},}
+		
+	sets.buff['Battuta'].Facing = {feet="Futhark Boots +2"}
 	
 		
 	sets.buff.doom = {waist="Gishdubar Sash", ring1="Blenmot's Ring", ring2="Purity Ring"}
 	sets.buff.sleep = {head="Frenzy Sallet"}
+	sets.buff['Embolden'] = {back={ name="Evasionist's Cape", augments={'Enmity+6','"Embolden"+15',}}}
 end
 
 
@@ -787,6 +814,13 @@ function job_post_midcast(spell, action, spellMap, eventArgs)
 			
 		end
 	end
+	
+
+		if buffactive['Embolden'] then 
+			if spell.skill == 'Enhancing Magic' then
+				equip(sets.buff['Embolden'])
+		end
+	end
 end
 
 function job_aftercast(spell, action, spellMap, eventArgs)
@@ -814,7 +848,7 @@ function job_buff_change(buff,gain, eventArgs)
 	
 	
 	if buff:lower()=='sleep' then
-        if gain and player.status == "Engaged" then 
+        if gain and player.hp > 100 then 
             equip(sets.buff.sleep)
 			add_to_chat(8, 'Nap time!!!')
 				if buffactive.stoneskin then
@@ -853,7 +887,7 @@ function job_buff_change(buff,gain, eventArgs)
 
 		
 	elseif buff:lower()=='doom' then
-        if gain and player.status == "Engaged" then 
+        if gain then 
             equip(sets.buff.doom)
 			disable('ring1' , 'ring2')
 			add_to_chat(123, 'Doomed!!! Use Holy Waters!!!')
@@ -871,7 +905,8 @@ function job_buff_change(buff,gain, eventArgs)
 	elseif buff == 'Vallation' or 'Valiance' then
         handle_equipping_gear(player.status)
 		
-	
+	elseif buff == 'Embolden' then
+		handle_equipping_gear(player.status)
     end
 	
 	----------------------------------------------------------------------------------------------------------------------------------
@@ -933,6 +968,7 @@ end]]
  
 function job_status_change(new_status, old_status)
     if new_status == 'Engaged' then
+		check_facing()
 		get_combat_weapon()
 		--get_combat_form()
     end          
@@ -940,6 +976,7 @@ end
 
 function job_update(cmdParams, eventArgs)
 	gearmode()
+	check_facing()
 	get_combat_weapon()
 	--get_combat_form()
 end
@@ -950,7 +987,7 @@ end
 	
 function customize_melee_set(meleeSet)
 	
-	-- When Lionheart is in DD mode, I have heavy protection.
+	-- When Lionheart is in tanking mode, I have heavy protection.
 	if state.CombatWeapon.value == 'Lionheart' then
 		if state.OffenseMode.value == 'Normal' then
 			if buffactive['Battuta'] then
@@ -960,6 +997,11 @@ function customize_melee_set(meleeSet)
 		elseif state.OffenseMode.value == 'Hybrid' then
 			if buffactive['Battuta'] then
 				meleeSet = set_combine(meleeSet, sets.buff['Battuta'].Melee)
+			end
+		-- When Lionheart is in DD mode, I have light protection.
+		elseif state.OffenseMode.value == 'DD' and check_facing() == true then
+			if buffactive['Battuta'] then
+				meleeSet = set_combine(meleeSet, sets.buff['Battuta'].Facing)
 			end
 		end
 	-- When Epo is in tanking mode, I have heavy protection.
@@ -972,7 +1014,12 @@ function customize_melee_set(meleeSet)
 		elseif state.OffenseMode.value == 'Hybrid' then
 			if buffactive['Battuta'] then
 				meleeSet = set_combine(meleeSet, sets.buff['Battuta'].Melee)
-			end 
+			end
+		-- When Epo is in DD mode, I have light protection.
+		elseif state.OffenseMode.value == 'DD' and check_facing() == true then
+			if buffactive['Battuta'] then
+				meleeSet = set_combine(meleeSet, sets.buff['Battuta'].Facing)
+			end
 		end
 	end
 	
@@ -1035,6 +1082,35 @@ function gearmode()
 		handle_equipping_gear(player.status)
   end
 end
+
+
+function check_facing()
+	if player.target.type == 'MONSTER' then
+		local target = windower.ffxi.get_mob_by_target('t')
+		local player = windower.ffxi.get_mob_by_target('me')
+		local dir_target = V{player.x, player.y} - V{target.x, target.y}
+		local dir_player = V{target.x, target.y} - V{player.x, player.y}
+		local player_heading = V{}.from_radian(player.facing)
+		local target_heading = V{}.from_radian(target.facing)
+		local player_angle = V{}.angle(dir_player, player_heading):degree():abs()
+		local target_angle = V{}.angle(dir_target, target_heading):degree():abs()
+		if player_angle < 90 and target_angle < 90 then
+			return true
+		else 
+			return false
+		end
+	end		
+end
+
+function getAngle(index)
+    local P = windower.ffxi.get_mob_by_target('me') --get player
+    local M = index and windower.ffxi.get_mob_by_id(index) or windower.ffxi.get_mob_by_target('t') --get target
+    local delta = {Y = (P.y - M.y),X = (P.x - M.x)} --subtracts target pos from player pos
+    local angleInDegrees = (math.atan2( delta.Y, delta.X) * 180 / math.pi)*-1 
+    local mult = 10^0
+    return math.floor(angleInDegrees * mult + 0.5) / mult
+end
+
 
 -- Select default macro book on initial load or subjob change.
 function select_default_macro_book()

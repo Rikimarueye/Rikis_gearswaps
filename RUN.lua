@@ -6,7 +6,7 @@
 -- Maintained and fixed by Rikimarueye@pheonix
 -- Original base lua created by Moten.
 
--- Version 1.0.0.8
+-- Version 1.0.0.9
 
 --[[
 	To do list:
@@ -17,6 +17,8 @@
 
 --[[
 	Change log:
+	
+	1.0.0.9: Minor fix to positional function
 	
 	1.0.0.8: Added the a function to accurately use embolden during the post_midcast
 	
@@ -170,7 +172,7 @@ function init_gear_sets()
 		ring2="Provocare Ring", 
 		feet="Ahosi Leggings",
 		waist="Goading Belt",
-		back={ name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','HP+20','Enmity+10',}},} 
+		back={ name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','Enmity+10','Damage taken-5%',}},} 
 
 	----------------------------------------------------------------------------------------------------------------------------------
 	-- JA Madness precasts
@@ -200,7 +202,7 @@ function init_gear_sets()
 	
     sets.precast.JA['Pflug'] =  set_combine(sets.enmity, {feet="Runeist's Boots +3"})
 	
-    sets.precast.JA['Battuta'] = {head="Futhark Bandeau +2"}
+    sets.precast.JA['Battuta'] = {head="Futhark Bandeau +3"}
 	
     sets.precast.JA['Liement'] = set_combine(sets.enmity, {body="Futhark Coat +3"})
 	
@@ -221,7 +223,7 @@ function init_gear_sets()
 	
     sets.precast.JA['Gambit'] = set_combine(sets.enmity, {hands="Runeist's Mitons +3"})
 	
-    sets.precast.JA['Rayke'] = set_combine(sets.enmity, {feet="Futhark Boots +2"})
+    sets.precast.JA['Rayke'] = set_combine(sets.enmity, {feet="Futhark Boots +3",})
 	
     sets.precast.JA['Elemental Sforzo'] = set_combine(sets.enmity, {body="Futhark Coat +3"})
 	
@@ -244,7 +246,7 @@ function init_gear_sets()
     sets.precast.JA['One For All'] = {
 		head="Halitus Helm",
 		body="Runeist's Coat +3",
-		hands="Turms Mittens",
+		hands="Turms Mittens +1",
 		legs="Eri. Leg Guards +1",
 		feet="Runeist's Boots +3",
 		neck="Loricate Torque +1",
@@ -366,7 +368,7 @@ function init_gear_sets()
 	
 	sets.midcast.Absorb = {
 		
-		head="Carmine Mask +1",
+		head="Futhark Bandeau +3",
 		neck="Sanctity Necklace",
 		body="Futhark Coat +3",
 		ear1="Enchanter's Earring +1",
@@ -386,23 +388,19 @@ function init_gear_sets()
 	
 	sets.midcast['Blue Magic'] = {}
 	
-	--[[sets.midcast['Jettatura'] = sets.enmity
-	
-	sets.midcast['Geist Wall'] = sets.enmity
+	sets.midcast['Jettatura'] = sets.enmity
 	
 	sets.midcast['Blank Gaze'] = sets.enmity
 	
-	sets.midcast['Sheep Song'] = sets.enmity
-	
-	sets.midcast['Wild Carrot'] = sets.enmity]]
+	sets.midcast['Wild Carrot'] = sets.enmity
 	
 	sets.midcast['Cocoon'] = {
 		ammo="Staunch Tathlum",
 		head={ name="Herculean Helm", augments={'Accuracy+23','Damage taken-4%','AGI+7',}},
 		body="Futhark Coat +3",
-		hands="Turms Mittens",
+		hands="Turms Mittens +1",
 		legs="Meg. Chausses +2",
-		feet="Turms Leggings",
+		feet="Turms Leggings +1",
 		neck="Loricate Torque +1",
 		waist="Flume Belt +1",
 		ear1="Genmei Earring",
@@ -452,7 +450,7 @@ function init_gear_sets()
 	-- +18 Phalanx/ 460 skill/ 2459 HP
 	sets.midcast['Phalanx'] = {
 		ammo="Staunch Tathlum",
-	    head="Futhark Bandeau +2",
+	    head="Futhark Bandeau +3",
 		neck="Loricate Torque +1",
         body={ name="Taeon Tabard", augments={'Phalanx +3',}},
 		ear1="Andoaa Earring",
@@ -490,7 +488,7 @@ function init_gear_sets()
 		back="Merciful Cape"
 		})
 		
-	sets.midcast.Cure = {feet="Futhark Boots +2"}
+	sets.midcast.Cure = {feet="Futhark Boots +3",}
 	
 	--sets.midcast['Yoran-Oran (UC)'] = set_combine(sets.midcast.FastRecast, {body="Yoran Unity Shirt"})
 
@@ -501,9 +499,9 @@ function init_gear_sets()
 	----------------------------------------------------------------------------------------------------------------------------------
 
     sets.idle = {
-		sub="Utu Grip",
+		
 		ammo="Homiliary",
-		head={ name="Herculean Helm", augments={'Accuracy+23','Damage taken-4%','AGI+7',}},
+		head="Futhark Bandeau +3",
 		body="Runeist's Coat +3",
 		hands={ name="Herculean Gloves", augments={'Accuracy+21 Attack+21','Mag. Acc.+2','Damage taken-3%','Mag. Acc.+5 "Mag.Atk.Bns."+5',}},
 		legs={ name="Herculean Trousers", augments={'VIT+5','"Refresh"+2','Accuracy+5 Attack+5',}},
@@ -517,9 +515,9 @@ function init_gear_sets()
 		back={ name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','Enmity+10','Damage taken-5%',}},}
 		
 	sets.idle.Town = {
-		sub="Utu Grip",
+		
 		ammo="Homiliary",
-		head={ name="Herculean Helm", augments={'Accuracy+23','Damage taken-4%','AGI+7',}},
+		head="Futhark Bandeau +3",
 		body="Runeist's Coat +3",
 		hands={ name="Herculean Gloves", augments={'Accuracy+21 Attack+21','Mag. Acc.+2','Damage taken-3%','Mag. Acc.+5 "Mag.Atk.Bns."+5',}},
 		legs="Carmine Cuisses +1",
@@ -537,7 +535,7 @@ function init_gear_sets()
 	sets.idle.Refresh = set_combine(sets.idle, {body="Runeist's Coat +3", waist="Fucho-no-obi"})
            
 	sets.defense.PDT = {
-		sub="Utu Grip",
+		
 		ammo="Staunch Tathlum",
 		head={ name="Herculean Helm", augments={'Accuracy+23','Damage taken-4%','AGI+7',}},
 		body="Futhark Coat +3",
@@ -553,11 +551,11 @@ function init_gear_sets()
 		back={ name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','HP+20','"Fast Cast"+10','Damage taken-5%',}},}
 
 	sets.defense.MDT = {
-		sub="Utu Grip",
+		
 		ammo="Staunch Tathlum",
 		head={ name="Herculean Helm", augments={'Accuracy+23','Damage taken-4%','AGI+7',}},
 		body={ name="Adhemar Jacket +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
-		hands="Ayanmo Manopolas +2",
+		hands={ name="Herculean Gloves", augments={'Accuracy+21 Attack+21','Mag. Acc.+2','Damage taken-3%','Mag. Acc.+5 "Mag.Atk.Bns."+5',}},
 		legs="Meg. Chausses +2",
 		feet={ name="Herculean Boots", augments={'Accuracy+28','Damage taken-3%','DEX+14','Attack+11',}},
 		neck="Warder's Charm +1",
@@ -568,14 +566,14 @@ function init_gear_sets()
 		ring2="Defending Ring",
 		back={ name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','HP+20','"Fast Cast"+10','Damage taken-5%',}},}
 
-	-- 2629 HP/ 41 DT/ 50 PDT/ 41 MDT/ 414+59 MEVA/ 114 INT/ 121 MND
+	-- 2579~ HP/ 40 DT/ 51 PDT/ 40 MDT/ 548+20+15 MEVA/ 118 INT/ 133 MND
 	sets.defense.DT = {
 		ammo="Staunch Tathlum",
-		head={ name="Herculean Helm", augments={'Accuracy+23','Damage taken-4%','AGI+7',}},
-		body="Runeist's Coat +3",
-		hands={ name="Herculean Gloves", augments={'Accuracy+21 Attack+21','Mag. Acc.+2','Damage taken-3%','Mag. Acc.+5 "Mag.Atk.Bns."+5',}},
+		head="Futhark Bandeau +3",
+		body="Futhark Coat +3",
+		hands="Turms Mittens +1",
 		legs="Rune. Trousers +3",
-		feet={ name="Herculean Boots", augments={'Accuracy+28','Damage taken-3%','DEX+14','Attack+11',}},
+		feet="Turms Leggings +1",
 		neck="Loricate Torque +1",
 		waist="Engraved Belt",
 		ear1="Eabani Earring",
@@ -585,14 +583,10 @@ function init_gear_sets()
 		back={ name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','Enmity+10','Damage taken-5%',}},}
 		
 		
-	-- 2720HP/ 19 DT/ 24 PDT/ 23 MDT/ 543+79 MEVA/ 115 INT/ 126 MND
+	-- 2639HP/ 24 DT/ 35 PDT/ 28 MDT/ 522+40+15 MEVA/ 118 INT/ 133 MND
 	sets.defense.Resist = set_combine(sets.defense.DT, {
 		ammo="Yamarang",
 		neck="Warder's Charm +1",
-		hands="Turms Mittens",
-		waist="Engraved Belt",
-		legs="Rune. Trousers +3",
-		feet="Turms Leggings",
 		ring1="Purity Ring",
 		back={ name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','Enmity+10','Damage taken-5%',}},
 		ear1="Hearty Earring",
@@ -610,13 +604,13 @@ function init_gear_sets()
 	
 	
     sets.engaged.Lionheart = {
-		sub="Utu Grip",
+		sub="Irenic Strap +1",
 		ammo="Staunch Tathlum",
-		head="Futhark Bandeau +2",
+		head="Futhark Bandeau +3",
 		body="Futhark Coat +3",
-		hands="Turms Mittens",
+		hands="Turms Mittens +1",
 		legs="Eri. Leg Guards +1",
-		feet="Turms Leggings",
+		feet="Turms Leggings +1",
 		neck="Loricate Torque +1",
 		waist="Engraved Belt",
 		ear1="Genmei Earring",
@@ -665,13 +659,13 @@ function init_gear_sets()
 	----------------------------------------------------------------------------------------------------------------------------------
 	
 	sets.engaged.Epeolatry = {
-		sub="Utu Grip",
+		sub="Irenic Strap +1",
 		ammo="Staunch Tathlum",
-		head="Futhark Bandeau +2",
+		head="Futhark Bandeau +3",
 		body="Futhark Coat +3",
-		hands="Turms Mittens",
+		hands="Turms Mittens +1",
 		legs="Eri. Leg Guards +1",
-		feet="Turms Leggings",
+		feet="Turms Leggings +1",
 		neck="Loricate Torque +1",
 		waist="Engraved Belt",
 		ear1="Genmei Earring",
@@ -726,16 +720,16 @@ function init_gear_sets()
 	----------------------------------------------------------------------------------------------------------------------------------
 	
 	sets.buff['Battuta'] = {
-		hands="Turms Mittens",
+		hands="Turms Mittens +1",
 		legs="Eri. Leg Guards +1",
-		feet="Turms Leggings",
+		feet="Turms Leggings +1",
 		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+1','"Store TP"+10','Parrying rate+5%',}},}
 		
 	sets.buff['Battuta'].Melee = {
-		feet="Turms Leggings",
+		feet="Turms Leggings +1",
 		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+1','"Store TP"+10','Parrying rate+5%',}},}
 		
-	sets.buff['Battuta'].Facing = {feet="Futhark Boots +2"}
+	sets.buff['Battuta'].Facing = {feet="Futhark Boots +3",}
 	
 		
 	sets.buff.doom = {waist="Gishdubar Sash", ring1="Blenmot's Ring", ring2="Purity Ring"}
@@ -1083,6 +1077,9 @@ function gearmode()
   end
 end
 
+---------------------------------------------------------------------------------------------------
+-- Voodoo magic that makes my relic boots equip under radial conditions. Credit: Whoever made the Gaze addon.
+---------------------------------------------------------------------------------------------------
 
 function check_facing()
 	if player.target.type == 'MONSTER' then
@@ -1099,7 +1096,8 @@ function check_facing()
 		else 
 			return false
 		end
-	end		
+	end	
+		return false
 end
 
 function getAngle(index)

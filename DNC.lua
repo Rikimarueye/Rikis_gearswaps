@@ -6,7 +6,7 @@
 -- Maintained and fixed by Rikimarueye@pheonix
 -- Original base lua created by Moten.
 
--- Version 1.0.1.0
+-- Version 1.0.1.1
 
 --[[
 	To do list:
@@ -17,6 +17,8 @@
 
 --[[
 	Change log:
+	
+	1.0.1.1: Minor fix to positional function
 	
 	1.0.1.0: A major development in my GS. I was able to borrow code from an addon to make a conditional gear swap based on position
 	
@@ -1798,9 +1800,8 @@ function check_facing()
 		else 
 			return false
 		end
-	else 
-		return false
 	end		
+		return false
 end
 
 function getAngle(index)

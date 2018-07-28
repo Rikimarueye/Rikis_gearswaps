@@ -608,12 +608,12 @@ function init_gear_sets()
 		ear1="Genmei Earring",
 	    ear2="Odnowa Earring +1",
 		body="Horos Casaque +3",
-		hands="Turms Mittens",
+		hands="Turms Mittens +1",
 		legs="Mummu Kecks +2",
 		ring1="Vocane Ring +1",
 		ring2="Defending Ring",
 		back={ name="Senuna's Mantle", augments={'AGI+20','Eva.+20 /Mag. Eva.+20','"Fast Cast"+10',}},
-		feet="Turms Leggings"}
+		feet="Turms Leggings +1",}
 
 	sets.idle.Town = {
 		ammo="Staunch Tathlum",
@@ -628,7 +628,7 @@ function init_gear_sets()
 		back={ name="Senuna's Mantle", augments={'AGI+20','Eva.+20 /Mag. Eva.+20','"Fast Cast"+10',}},
 		waist="Reiki Yotai",
 		legs="Horos Tights +3",
-		feet="Turms Leggings"}
+		feet="Turms Leggings +1",}
 
 	sets.idle.Weak = {
 	    ammo="Staunch Tathlum",
@@ -667,7 +667,7 @@ function init_gear_sets()
 	    ammo="Staunch Tathlum",
 	    head={ name="Herculean Helm", augments={'Accuracy+23','Damage taken-4%','AGI+7',}},
         neck="Warder's Charm +1",
-		hands="Turms Mittens",
+		hands="Turms Mittens +1",
         ring1="Vocane Ring +1",
 		ring2="Defending Ring",
 		ear1="Odnowa Earring +1",
@@ -690,7 +690,7 @@ function init_gear_sets()
 		waist="Engraved Belt",
 		legs="Mummu Kecks +2",
 		back="Agema Cape",
-		feet="Turms Leggings"}
+		feet="Turms Leggings +1",}
 
 	
 	sets.defense.Resist = {
@@ -698,20 +698,20 @@ function init_gear_sets()
 	    head={ name="Herculean Helm", augments={'Accuracy+23','Damage taken-4%','AGI+7',}},
         neck="Warder's Charm +1",
 		body="Turms Harness",
-		hands="Turms Mittens",
+		hands="Turms Mittens +1",
         ring1="Vocane Ring +1",
 		ring2="Defending Ring",
 		ear1="Odnowa Earring +1",
 		ear2="Sanare Earring",
 		waist="Engraved Belt",
 		legs="Mummu Kecks +2",
-        feet="Turms Leggings"}
+        feet="Turms Leggings +1",}
 		
 	sets.defense.Parry = set_combine(sets.defense.PDT, {
 		neck="Combatant's Torque",
 		ear1="Genmei Earring",
-		hands="Turms Mittens", 
-		feet="Turms Leggings"})
+		hands="Turms Mittens +1", 
+		feet="Turms Leggings +1",})
 	
 	
     sets.Kiting = {}
@@ -1592,6 +1592,7 @@ function determine_haste_group()
 		if 		(buffactive[228] and (buffactive[33] or (buffactive.march == 1) or buffactive[604])) or                 			-- Embrava + (HasteII or 2x march or MG) + Samba
 				(buffactive[580] and (buffactive[33] or (buffactive.march == 1) or buffactive[604])) or   							-- GeoHaste + (HasteII or 1x march or MG)
 				(buffactive[33] and ((buffactive.march == 1) or buffactive[604])) or												-- HasteII + (1x march or MG)
+				(buffactive.march == 2 and buffactive[370]) or                                                                      -- 2x march + Samba
 				(buffactive[604] and (buffactive.march == 2)) or												                    -- MG + 2x March 
 				((buffactive.march == 2) and buffactive[33]) or																		-- 2x March + Haste
 				((buffactive.march == 2) and buffactive[370]) or
@@ -1600,7 +1601,6 @@ function determine_haste_group()
 	        classes.CustomMeleeGroups:append('MaxHaste')
         elseif  (buffactive[228] and buffactive.march == 1) or 																		-- Embrava + 1x march
 				(buffactive[33] or buffactive[580]) and buffactive[370] or
-				(buffactive.march == 2 and buffactive[370]) or                                                                      -- 2x march + Samba
 				(buffactive[228] and buffactive[604]) then																			-- Embrava + MG
             add_to_chat(8, '-------------Haste 40%-------------')
 		    classes.CustomMeleeGroups:append('Haste_40')	
@@ -1628,6 +1628,7 @@ function determine_haste_group()
 		end
     else																													-- ***This section is for Haste I*** --										
 		if 		(buffactive[228] and buffactive.march == 1 and buffactive[370]) or	                                        		-- Embrava + march + Samba
+				(buffactive.march == 2 and buffactive[370]) or                                                         				-- 2x march + Samba
 				((buffactive[33] or buffactive[604]) and ((buffactive.march == 2) and buffactive[370])) or							-- (Haste or MG) + (2x march + Samba)
 				(buffactive[580] and ((buffactive.march == 1) or buffactive[33] or buffactive[604])) or   							-- GeoHaste + (2x march or Haste or MG)
 				(buffactive[580] and ((buffactive.march == 2) or buffactive[33] or buffactive[604])) or
@@ -1638,7 +1639,6 @@ function determine_haste_group()
 	        classes.CustomMeleeGroups:append('MaxHaste')
 		elseif 	((buffactive[33] and buffactive[604] and buffactive[370])) or			                               				-- Haste + MG + Samba
 				(buffactive[580] and buffactive[370]) or		                        											-- GeoHaste + Samba
-				(buffactive.march == 2 and buffactive[370]) or                                                         				-- 2x march + Samba
 				(buffactive.march == 1 and buffactive[370] and buffactive[33])  or                                                    -- 1x march + haste 1 + Samba
 				((buffactive[33] or buffactive[604]) and buffactive[228]) then														-- (Haste or MG) + Embrava
             add_to_chat(8, '-------------Haste 40%-------------')
@@ -1798,6 +1798,8 @@ function check_facing()
 		else 
 			return false
 		end
+	else 
+		return false
 	end		
 end
 

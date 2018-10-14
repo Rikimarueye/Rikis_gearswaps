@@ -163,7 +163,7 @@ function init_gear_sets()
 		ammo="Sapience Orb",
 		head="Halitus Helm",
 		body="Emet Harness +1",
-		neck="Moonbeam Necklace",
+		neck="Moonlight Necklace",
 		hands="Kurys Gloves",
 		legs="Eri. Leg Guards +1",
 		ear1="Cryptic Earring",
@@ -271,12 +271,12 @@ function init_gear_sets()
 	-- FC sets
 	----------------------------------------------------------------------------------------------------------------------------------
 	
-	-- 63 FC/ 22 DT/ 28 PDT/ 25 MDT/ 2536 HP
+	-- 70 FC/ 22 DT/ 20 PDT/ 27 MDT/ 2536 HP
     sets.precast.FC = {
-        ammo="Staunch Tathlum",
+        ammo="Sapience Orb",
 		head="Rune. Bandeau +3",
-		neck="Voltsurge Torque",
-		ear1="Etiolation Earring",
+		neck="Orunmila's Torque",
+		ear1="Enchanter Earring +1",
 		ear2="Loquacious Earring",
 		body={ name="Taeon Tabard", augments={'"Fast Cast"+5','Phalanx +3',}},
 		hands="Leyline Gloves",
@@ -285,7 +285,7 @@ function init_gear_sets()
 		ring2="Defending Ring",
 		back={ name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','HP+20','"Fast Cast"+10','Damage taken-5%',}},
 		waist="Flume Belt +1", 
-		feet={ name="Herculean Boots", augments={'"Mag.Atk.Bns."+15','"Fast Cast"+5','Mag. Acc.+14',}}}
+		feet="Carmine Greaves +1"}
 			
     sets.precast.FC['Enhancing Magic'] = set_combine(sets.precast.FC, {waist="Siegel Sash", legs="Futhark Trousers +3"})
     
@@ -301,15 +301,15 @@ function init_gear_sets()
 	-- Sub 2400 HP for all WSs
     sets.precast.WS['Resolution'] = {
 		ammo="Knobkierrie",
-		head={ name="Herculean Helm", augments={'Accuracy+16 Attack+16','"Triple Atk."+4','DEX+10','Accuracy+8','Attack+5',}},
+		head={ name="Adhemar Bonnet +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
 		body={ name="Adhemar Jacket +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
 		hands="Futhark Mitons +3",
 		legs="Meghanada Chausses +2",
 		feet={ name="Adhe. Gamashes +1", augments={'STR+12','DEX+12','Attack+20',}},
 		neck="Fotia Gorget",
 		waist="Fotia Belt",
-		ear1="Sherida Earring",
-		ear2={ name="Moonshade Earring", augments={'Attack+4','TP Bonus +25',}},
+		ear1="Moonshade Earring",
+		ear2="Sherida Earring",
 		ring1="Regal Ring",
 		ring2="Niqmaddu Ring",
 		back={ name="Ogma's cape", augments={'STR+20','Accuracy+20 Attack+20','STR+10','"Dbl.Atk."+10','Phys. dmg. taken-10%',}},}
@@ -318,7 +318,7 @@ function init_gear_sets()
     sets.precast.WS['Dimidiation'] = {
 		ammo="Knobkierrie",
 		head={ name="Herculean Helm", augments={'Accuracy+23 Attack+23','Weapon skill damage +4%','DEX+15',}},
-        body="Meghanada Cuirie +2",
+        body={ name="Adhemar Jacket +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
         hands="Meghanada Gloves +2",
         legs="Lustratio Subligar +1",
         feet="Lustratio Leggings +1",
@@ -345,7 +345,7 @@ function init_gear_sets()
     sets.midcast.FastRecast = {
 		ammo="Staunch Tathlum",
 	    head={ name="Taeon Chapeau", augments={'Spell interruption rate down -10%','Phalanx +3',}},
-		neck="Moonbeam Necklace",
+		neck="Moonlight Necklace",
         body={ name="Taeon Tabard", augments={'Spell interruption rate down -10%','"Regen" potency+3',}},
 		ear1="Magnetic Earring",
 		ear2="Odnowa Earring +1",
@@ -371,7 +371,7 @@ function init_gear_sets()
 		head="Futhark Bandeau +3",
 		neck="Sanctity Necklace",
 		body="Futhark Coat +3",
-		ear1="Enchanter's Earring +1",
+		ear1="Enchanter Earring +1",
 		ear2="Dignitary's Earring",
 		hands="Futhark Mitons +3",
 		ring1="Stikini Ring",
@@ -392,7 +392,18 @@ function init_gear_sets()
 	
 	sets.midcast['Blank Gaze'] = sets.enmity
 	
-	sets.midcast['Wild Carrot'] = sets.enmity
+	sets.midcast['Wild Carrot'] = set_combine(sets.enmity, {
+		body="Vrikodara Jupon",
+		neck="Phalaina Locket",
+		waist="Gishdubar Sash",
+		ear1="Roundel Earring",
+		ear2="Mendi. Earring",
+		ring1="Vocane Ring +1",
+		ring2="Defending Ring",
+		back={ name="Ogma's cape", augments={'VIT+20','Eva.+20 /Mag. Eva.+20','VIT+10','"Cure" potency +10%',}},
+		})
+		
+	sets.midcast['Healing Breeze'] = sets.midcast['Wild Carrot']
 	
 	sets.midcast['Cocoon'] = {
 		ammo="Staunch Tathlum",
@@ -438,31 +449,33 @@ function init_gear_sets()
 		
 	
 	sets.midcast['Aquaveil'] = set_combine(sets.midcast['Enhancing Magic'], {
-		head="Carmine Mask +1", 
+		head="Carmine Mask +1",
+		hands="Regal Gauntlets",
 		legs={ name="Carmine Cuisses +1", augments={'Accuracy+12','DEX+12','MND+20',}},
 		back="Merciful Cape"
 		})
 	
 	sets.midcast['Crusade'] = set_combine(sets.midcast['Enhancing Magic'], {
 		head="Erilaz Galea +1",
+		hands="Regal Gauntlets",
 		})
 		
-	-- +18 Phalanx/ 460 skill/ 2459 HP
-	sets.midcast['Phalanx'] = {
+	-- +15/18 Phalanx/ 460 skill/ 2459 HP
+	sets.midcast['Phalanx'] = set_combine(sets.midcast['Enhancing Magic'], {
 		ammo="Staunch Tathlum",
 	    head="Futhark Bandeau +3",
 		neck="Loricate Torque +1",
         body={ name="Taeon Tabard", augments={'Phalanx +3',}},
 		ear1="Andoaa Earring",
 		ear2="Odnowa Earring +1",
-		ring1="Moonbeam Ring",
+		ring1="Vocane Ring +1",
 		ring2="Defending Ring",
 		hands={ name="Taeon Gloves", augments={'"Snapshot"+4','Phalanx +3',}},
 		legs={ name="Taeon Tights", augments={'Accuracy+20 Attack+20','"Snapshot"+3','Phalanx +3',}},
 		feet={ name="Taeon Boots", augments={'"Snapshot"+5','Phalanx +3',}},
 		waist="Olympus Sash",
 		back="Merciful Cape"
-		}
+		})
     
 	sets.midcast['Refresh'] = set_combine(sets.midcast['Enhancing Magic'], {
 		head="Erilaz Galea +1",
@@ -478,6 +491,7 @@ function init_gear_sets()
 		
 	sets.midcast['Stoneskin'] = set_combine(sets.midcast['Enhancing Magic'], {
 		neck="Stone Gorget",
+		hands="Regal Gauntlets",
 		ear2="Earthcry Earring",
 		waist="Siegel Sash",
 		ring2="Defending Ring",
@@ -502,7 +516,7 @@ function init_gear_sets()
 		
 		ammo="Homiliary",
 		head="Futhark Bandeau +3",
-		body="Runeist's Coat +3",
+		body="Futhark Coat +3",
 		hands={ name="Herculean Gloves", augments={'Accuracy+21 Attack+21','Mag. Acc.+2','Damage taken-3%','Mag. Acc.+5 "Mag.Atk.Bns."+5',}},
 		legs={ name="Herculean Trousers", augments={'VIT+5','"Refresh"+2','Accuracy+5 Attack+5',}},
 		feet={ name="Herculean Boots", augments={'"Store TP"+1','Accuracy+18','"Refresh"+2',}},
@@ -512,7 +526,7 @@ function init_gear_sets()
 		ear2="Eabani Earring",
 		ring1="Vocane Ring +1",
 		ring2="Defending Ring",
-		back={ name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','Enmity+10','Damage taken-5%',}},}
+		back={ name="Ogma's cape", augments={'VIT+20','Eva.+20 /Mag. Eva.+20','VIT+10','Enmity+10','DEF+50',}},}
 		
 	sets.idle.Town = {
 		
@@ -525,10 +539,10 @@ function init_gear_sets()
 		neck="Loricate Torque +1",
 		waist="Flume Belt +1",
 		ear1="Genmei Earring",
-		ear2="Odnowa Earring +1",
+		ear2="Eabani Earring",
 		ring1="Vocane Ring +1",
 		ring2="Defending Ring",
-		back={ name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','Mag. Evasion+10','Enmity+10','Damage taken-5%',}},}
+		back={ name="Ogma's cape", augments={'VIT+20','Eva.+20 /Mag. Eva.+20','VIT+10','Enmity+10','DEF+50',}},}
     
 	sets.idle.Weak = sets.idle
 	
@@ -617,14 +631,14 @@ function init_gear_sets()
 		ear2="Odnowa Earring +1",
 		ring1="Vocane Ring +1",
 		ring2="Defending Ring",
-		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+1','"Store TP"+10','Parrying rate+5%',}},}
+		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Parrying rate+5%',}},}
 			
 	
 	-- 51 PDT/ 37 MDT
 	sets.engaged.Lionheart.Hybrid = {
 		sub="Utu Grip",
 		ammo="Yamarang",
-		head={ name="Dampening Tam", augments={'DEX+10','Accuracy+15','Mag. Acc.+15','Quadruple Attack +3',}},
+		head={ name="Adhemar Bonnet +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
 		body="Futhark Coat +3",
 		hands={ name="Adhemar Wrist. +1", augments={'STR+12','DEX+12','Attack+20',}},
 		legs="Meghanada chausses +2",
@@ -641,7 +655,7 @@ function init_gear_sets()
 	sets.engaged.Lionheart.DD = {
 		sub="Utu Grip",
 		ammo="Yamarang",
-		head={ name="Dampening Tam", augments={'DEX+10','Accuracy+15','Mag. Acc.+15','Quadruple Attack +3',}},
+		head={ name="Adhemar Bonnet +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
 		body={ name="Adhemar Jacket +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
 		hands={ name="Adhemar Wrist. +1", augments={'STR+12','DEX+12','Attack+20',}},
 		legs={ name="Adhemar Kecks +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
@@ -672,14 +686,14 @@ function init_gear_sets()
 		ear2="Odnowa Earring +1",
 		ring1="Vocane Ring +1",
 		ring2="Defending Ring",
-		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+1','"Store TP"+10','Parrying rate+5%',}},}
+		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Parrying rate+5%',}},}
 			
 	
 	-- 51 PDT/ 37 MDT
 	sets.engaged.Epeolatry.Hybrid = {
 		sub="Utu Grip",
 		ammo="Yamarang",
-		head={ name="Dampening Tam", augments={'DEX+10','Accuracy+15','Mag. Acc.+15','Quadruple Attack +3',}},
+		head={ name="Adhemar Bonnet +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
 		body="Futhark Coat +3",
 		hands={ name="Adhemar Wrist. +1", augments={'STR+12','DEX+12','Attack+20',}},
 		legs="Meghanada chausses +2",
@@ -696,7 +710,7 @@ function init_gear_sets()
 	sets.engaged.Epeolatry.DD = {
 		sub="Utu Grip",
 		ammo="Yamarang",
-		head={ name="Dampening Tam", augments={'DEX+10','Accuracy+15','Mag. Acc.+15','Quadruple Attack +3',}},
+		head={ name="Adhemar Bonnet +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
 		body={ name="Adhemar Jacket +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
 		hands={ name="Adhemar Wrist. +1", augments={'STR+12','DEX+12','Attack+20',}},
 		legs={ name="Adhemar Kecks +1", augments={'DEX+12','AGI+12','Accuracy+20',}},
@@ -723,18 +737,26 @@ function init_gear_sets()
 		hands="Turms Mittens +1",
 		legs="Eri. Leg Guards +1",
 		feet="Turms Leggings +1",
-		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+1','"Store TP"+10','Parrying rate+5%',}},}
+		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Parrying rate+5%',}},}
 		
 	sets.buff['Battuta'].Melee = {
 		feet="Turms Leggings +1",
-		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+1','"Store TP"+10','Parrying rate+5%',}},}
+		back={ name="Ogma's cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','"Store TP"+10','Parrying rate+5%',}},}
 		
 	sets.buff['Battuta'].Facing = {feet="Futhark Boots +3",}
 	
 		
-	sets.buff.doom = {waist="Gishdubar Sash", ring1="Blenmot's Ring", ring2="Purity Ring"}
+	sets.buff.doom = {
+		waist="Gishdubar Sash", 
+		ring1="Blenmot's Ring", 
+		ring2="Purity Ring"}
+		
 	sets.buff.sleep = {head="Frenzy Sallet"}
-	sets.buff['Embolden'] = {back={ name="Evasionist's Cape", augments={'Enmity+6','"Embolden"+15',}}}
+	
+	sets.buff['Embolden'] = {
+		hands="Regal Gauntlets",
+		legs="Futhark Trousers +3",
+		back={ name="Evasionist's Cape", augments={'Enmity+6','"Embolden"+15',}}}
 end
 
 
@@ -801,7 +823,9 @@ function job_post_midcast(spell, action, spellMap, eventArgs)
 				if buffactive['Vallation'] or buffactive['Valiance'] then
 						equip(sets.enmity)
 				else
+						add_to_chat(8, '*** Use Vallation or Valiance. ***')
 						equip(sets.midcast.FastRecast)
+						
 				end
 		else
 				equip(sets.enmity)
